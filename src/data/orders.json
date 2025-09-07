@@ -1,0 +1,19 @@
+{
+  "test-123": {
+    "id": "test-123",
+    "buyer": "0xAAA",
+    "email": "buyer@example.com",
+    "createdAt": 1693440000000,
+    "priceEUR": 123.45,
+    "collection": "ChainXCollection",
+    "tokenId": "7",
+    "listingId": "42",
+    "chainId": 137
+  },
+  "manual-1": {
+    "id": "manual-1",
+    "buyer": "0xAAA",
+    "createdAt": 1000000000000,
+    "priceEUR": 12.34
+  }
+}
