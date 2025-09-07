@@ -1,22 +1,58 @@
-@"
 # Build / runtime
 .next/
 out/
 dist/
+build/
 
 # Dependencies
 node_modules/
 
-# Env
-.env
-.env.local
+# Env (ignora cualquier .env*)
+.env*
+.env.*.local
 
 # Editor / OS
 .vscode/
+.idea/
 .DS_Store
+Thumbs.db
 
 # Logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-"@ | Out-File -Encoding UTF8 .gitignore
+pnpm-debug.log*
+
+# Test / coverage
+coverage/
+.jest/
+
+# Misc caches
+.cache/
+.vite/
+.parcel-cache/
+tmp/
+temp/
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+
+# Certificates/keys (local dev)
+*.pem
+*.key
+*.crt
+
+# Production/CI artifacts
+.vercel/
+.now/
+.netlify/
+dist/
+out/
+
+# Optional local files
+local.env
+.env.local
+
+# Keep lock files (commit them), do NOT ignore package-lock.json / yarn.lock
+# End of file
