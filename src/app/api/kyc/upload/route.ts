@@ -106,6 +106,8 @@ export async function POST(req: Request) {
           { status: 500 },
         );
       }
+      // TODO: Install @aws-sdk/client-s3 to enable S3 uploads
+      /*
       const { S3Client, PutObjectCommand } = await import('@aws-sdk/client-s3');
       const s3 = new S3Client({ region: process.env.AWS_REGION });
       const key = `kyc/${Date.now()}-${Math.random().toString(36).slice(2)}-${
@@ -123,6 +125,13 @@ export async function POST(req: Request) {
       );
       // store key (not public url). Here we return a signed URL? better: return key and server will generate presigned URL for admin.
       return NextResponse.json({ ok: true, key });
+      */
+      
+      // Placeholder response while S3 is not configured
+      return NextResponse.json(
+        { ok: false, error: 's3-not-available' },
+        { status: 501 },
+      );
     }
   } catch (err) {
     console.error('kyc upload error', err);

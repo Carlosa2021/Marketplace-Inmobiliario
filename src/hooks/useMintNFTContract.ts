@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useSendTransaction } from 'thirdweb/react';
 import { prepareContractCall } from 'thirdweb';
-import { nftCollection } from '@/lib/contracts';
+import { nftCollectionContract } from '@/lib/contracts';
 
 export function useMintNFTContract() {
   const {
@@ -15,7 +15,7 @@ export function useMintNFTContract() {
 
   async function mint({ to, uri }: { to: string; uri: string }) {
     const tx = prepareContractCall({
-      contract: nftCollection,
+      contract: nftCollectionContract,
       method: 'function mintTo(address to, string uri)',
       params: [to, uri],
     });

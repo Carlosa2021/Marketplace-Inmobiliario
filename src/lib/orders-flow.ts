@@ -28,7 +28,7 @@ export async function createOrder(
   orderPartial: Partial<Order>,
 ): Promise<Order> {
   const id = orderPartial.id ?? `manual-${Date.now()}`;
-  const now = Math.floor(Date.now() / 1000);
+  const now = new Date().toISOString();
   const order: Order = {
     id,
     createdAt: orderPartial.createdAt ?? now,
@@ -39,8 +39,30 @@ export async function createOrder(
     tokenId: orderPartial.tokenId,
     listingId: orderPartial.listingId,
     chainId: orderPartial.chainId ?? 137,
+    status: 'pending',
     ...orderPartial,
   };
   upsertOrder(order);
   return order;
+}
+
+/**
+ * Cumple una orden y genera recibo
+ */
+export async function fulfillAndReceipt(
+  orderId: string,
+  fulfillmentData: { txHash: string; chainId?: number },
+): Promise<Order> {
+  const order = getOrderById(orderId);
+  if (!order) throw new Error('Order not found');
+  
+  const updatedOrder: Order = {
+    ...order,
+    status: 'completed',
+    ...fulfillmentData,
+    updatedAt: new Date().toISOString(),
+  };
+  
+  upsertOrder(updatedOrder);
+  return updatedOrder;
 }

@@ -83,3 +83,48 @@ export function upsertOrder(order: Order): Order {
   writeAllOrdersToDisk(all);
   return order;
 }
+
+/**
+ * Alias para getOrderById (para compatibilidad)
+ */
+export function getOrder(id: string): Promise<Order | undefined> {
+  return Promise.resolve(getOrderById(id));
+}
+
+/**
+ * Crea una nueva orden
+ */
+export function createOrder(orderData: Partial<Order>): Promise<Order> {
+  const newOrder: Order = {
+    id: Date.now().toString(),
+    buyer: orderData.buyer || '',
+    listingId: orderData.listingId || '',
+    chainId: orderData.chainId || 137,
+    status: 'pending',
+    ...orderData,
+  } as Order;
+  
+  return Promise.resolve(upsertOrder(newOrder));
+}
+
+/**
+ * Actualiza una orden existente
+ */
+export function updateOrder(id: string, updates: Partial<Order>): Promise<Order | undefined> {
+  const existingOrder = getOrderById(id);
+  if (!existingOrder) {
+    return Promise.resolve(undefined);
+  }
+  
+  const updatedOrder = { ...existingOrder, ...updates };
+  return Promise.resolve(upsertOrder(updatedOrder));
+}
+
+/**
+ * Permite acceso después de la compra (placeholder)
+ */
+export function allowAfterPurchase(listingId: string, buyer: string, chainId: number): Promise<void> {
+  // Implementar lógica de allowlist o permisos post-compra
+  console.log('allowAfterPurchase called:', { listingId, buyer, chainId });
+  return Promise.resolve();
+}

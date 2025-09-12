@@ -43,3 +43,22 @@ export interface KycSubmission {
   reviewer?: string;
   reviewedAt?: string;
 }
+
+/** ===== Order types ===== */
+export interface Order {
+  id: string;
+  buyer: string;
+  listingId?: string;
+  chainId: number;
+  status: 'pending' | 'completed' | 'failed' | 'cancelled';
+  amount?: string;
+  currency?: string;
+  paymentMethod?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  txHash?: string;
+  priceEUR?: number;
+  email?: string;
+  collection?: string;
+  tokenId?: string;
+}
