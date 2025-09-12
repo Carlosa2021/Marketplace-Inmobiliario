@@ -1,5 +1,5 @@
 // src/app/api/marketplace/listings/[id]/revoke/route.ts
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 // TODO: Re-enable when thirdweb marketplace extensions are available
 /*
 import { getContract, sendTransaction } from 'thirdweb';
@@ -12,10 +12,7 @@ import { client, adminAccount } from '@/lib/thirdweb/client-server';
 
 export const runtime = 'nodejs';
 
-export async function POST(
-  _req: NextRequest,
-  { params: _params }: { params: { id: string } },
-) {
+export async function POST() {
   // TODO: Re-enable when thirdweb marketplace extensions are available
   return NextResponse.json(
     { error: 'Marketplace revoke functionality temporarily disabled' },

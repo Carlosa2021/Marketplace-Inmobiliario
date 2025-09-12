@@ -1,5 +1,5 @@
 // src/app/api/marketplace/listings/[id]/approve/route.ts
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 // TODO: Re-enable when thirdweb marketplace extensions are available
 /*
 import { getContract, sendTransaction } from 'thirdweb';
@@ -20,10 +20,7 @@ type Body = {
 };
 */
 
-export async function POST(
-  _req: NextRequest,
-  { params: _params }: { params: { id: string } },
-) {
+export async function POST() {
   // TODO: Re-enable when thirdweb marketplace extensions are available
   return NextResponse.json(
     { error: 'Marketplace approval functionality temporarily disabled' },

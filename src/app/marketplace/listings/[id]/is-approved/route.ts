@@ -1,5 +1,5 @@
 // src/app/api/marketplace/listings/[id]/is-approved/route.ts
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 // TODO: Re-enable when thirdweb marketplace extensions are available
 /*
 import { getContract } from 'thirdweb';
@@ -12,10 +12,7 @@ import { client } from '@/lib/thirdweb/client-server';
 
 export const runtime = 'nodejs';
 
-export async function GET(
-  _req: NextRequest,
-  { params: _params }: { params: { id: string } },
-) {
+export async function GET() {
   // TODO: Re-enable when thirdweb marketplace extensions are available
   return NextResponse.json(
     { error: 'Marketplace approval check functionality temporarily disabled' },
