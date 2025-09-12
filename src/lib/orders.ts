@@ -103,19 +103,22 @@ export function createOrder(orderData: Partial<Order>): Promise<Order> {
     status: 'pending',
     ...orderData,
   } as Order;
-  
+
   return Promise.resolve(upsertOrder(newOrder));
 }
 
 /**
  * Actualiza una orden existente
  */
-export function updateOrder(id: string, updates: Partial<Order>): Promise<Order | undefined> {
+export function updateOrder(
+  id: string,
+  updates: Partial<Order>,
+): Promise<Order | undefined> {
   const existingOrder = getOrderById(id);
   if (!existingOrder) {
     return Promise.resolve(undefined);
   }
-  
+
   const updatedOrder = { ...existingOrder, ...updates };
   return Promise.resolve(upsertOrder(updatedOrder));
 }
@@ -123,7 +126,11 @@ export function updateOrder(id: string, updates: Partial<Order>): Promise<Order 
 /**
  * Permite acceso después de la compra (placeholder)
  */
-export function allowAfterPurchase(listingId: string, buyer: string, chainId: number): Promise<void> {
+export function allowAfterPurchase(
+  listingId: string,
+  buyer: string,
+  chainId: number,
+): Promise<void> {
   // Implementar lógica de allowlist o permisos post-compra
   console.log('allowAfterPurchase called:', { listingId, buyer, chainId });
   return Promise.resolve();

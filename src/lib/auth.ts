@@ -53,9 +53,11 @@ export async function getUserFromRequest(
  * Requiere una API key válida para acceder a endpoints protegidos
  */
 export function requireApiKey(req: NextRequest): void {
-  const apiKey = req.headers.get('x-api-key') || req.headers.get('authorization')?.replace('Bearer ', '');
+  const apiKey =
+    req.headers.get('x-api-key') ||
+    req.headers.get('authorization')?.replace('Bearer ', '');
   const validApiKey = process.env.API_KEY || 'dev-api-key';
-  
+
   if (!apiKey || apiKey !== validApiKey) {
     throw new Error('Unauthorized: Invalid API key');
   }

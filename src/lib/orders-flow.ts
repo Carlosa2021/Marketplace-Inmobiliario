@@ -55,14 +55,14 @@ export async function fulfillAndReceipt(
 ): Promise<Order> {
   const order = getOrderById(orderId);
   if (!order) throw new Error('Order not found');
-  
+
   const updatedOrder: Order = {
     ...order,
     status: 'completed',
     ...fulfillmentData,
     updatedAt: new Date().toISOString(),
   };
-  
+
   upsertOrder(updatedOrder);
   return updatedOrder;
 }

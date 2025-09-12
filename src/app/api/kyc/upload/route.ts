@@ -3,6 +3,14 @@ import { NextResponse } from 'next/server';
 
 export const runtime = 'nodejs';
 
+// Type definition for ThirdwebStorage module
+interface ThirdwebStorageModule {
+  ThirdwebStorage: new (config: { secretKey: string }) => {
+    uploadRaw?: (buffer: Buffer) => Promise<unknown>;
+    upload?: (path: string) => Promise<unknown>;
+  };
+}
+
 function extractUrlFromResult(res: unknown): string | null {
   if (typeof res === 'string') return res;
   if (res && typeof res === 'object') {
@@ -59,9 +67,9 @@ export async function POST(req: Request) {
         );
       }
 
-      const ThirdwebStorage = (mod as any).ThirdwebStorage;
+      const ThirdwebStorage = (mod as ThirdwebStorageModule).ThirdwebStorage;
       const storage = new ThirdwebStorage({
-        secretKey: process.env.THIRDWEB_KEY,
+        secretKey: process.env.THIRDWEB_KEY || '',
       });
 
       // prefer uploadRaw; fallback to upload (path) if available
@@ -126,7 +134,7 @@ export async function POST(req: Request) {
       // store key (not public url). Here we return a signed URL? better: return key and server will generate presigned URL for admin.
       return NextResponse.json({ ok: true, key });
       */
-      
+
       // Placeholder response while S3 is not configured
       return NextResponse.json(
         { ok: false, error: 's3-not-available' },
