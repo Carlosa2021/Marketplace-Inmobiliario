@@ -31,7 +31,9 @@ if (privateKey && !isValidPrivateKey(privateKey)) {
 }
 
 // Asegurar que la clave privada no tenga prefijo 0x
-const cleanPrivateKey = privateKey.startsWith('0x') ? privateKey.slice(2) : privateKey;
+const cleanPrivateKey = privateKey.startsWith('0x')
+  ? privateKey.slice(2)
+  : privateKey;
 
 const client = createThirdwebClient({
   secretKey,
