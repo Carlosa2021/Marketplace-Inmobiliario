@@ -16,9 +16,9 @@ export async function POST() {
   // TODO: Re-enable when thirdweb marketplace extensions are available
   return NextResponse.json(
     { error: 'Marketplace revoke functionality temporarily disabled' },
-    { status: 503 }
+    { status: 503 },
   );
-  
+
   /*
   try {
     const { marketplace, buyers } = (await req.json()) as Body;
