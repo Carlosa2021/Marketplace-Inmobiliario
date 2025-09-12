@@ -1,23 +1,27 @@
 // src/app/api/marketplace/listings/[id]/is-approved/route.ts
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+// TODO: Re-enable when thirdweb marketplace extensions are available
+/*
 import { getContract } from 'thirdweb';
 import { polygon } from 'thirdweb/chains';
 import {
   isBuyerApprovedForReservedListing, // <-- extensión marketplace (lectura)
 } from 'thirdweb/extensions/marketplace';
 import { client } from '@/lib/thirdweb/client-server';
+*/
 
 export const runtime = 'nodejs';
 
-type Query = {
-  marketplace: string;
-  buyer: string;
-};
-
 export async function GET(
-  req: NextRequest,
-  { params }: { params: { id: string } },
+  _req: NextRequest,
+  { params: _params }: { params: { id: string } },
 ) {
+  // TODO: Re-enable when thirdweb marketplace extensions are available
+  return NextResponse.json(
+    { error: 'Marketplace approval check functionality temporarily disabled' },
+    { status: 503 }
+  );
+}
   try {
     const { searchParams } = new URL(req.url);
     const marketplace = searchParams.get('marketplace')!;

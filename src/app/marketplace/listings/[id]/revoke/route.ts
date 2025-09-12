@@ -1,23 +1,27 @@
 // src/app/api/marketplace/listings/[id]/revoke/route.ts
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+// TODO: Re-enable when thirdweb marketplace extensions are available
+/*
 import { getContract, sendTransaction } from 'thirdweb';
 import { polygon } from 'thirdweb/chains';
 import {
   revokeBuyerFromReservedListing, // <-- extensión marketplace
 } from 'thirdweb/extensions/marketplace';
 import { client, adminAccount } from '@/lib/thirdweb/client-server';
+*/
 
 export const runtime = 'nodejs';
 
-type Body = {
-  marketplace: string;
-  buyers: string[];
-};
-
 export async function POST(
-  req: NextRequest,
-  { params }: { params: { id: string } },
+  _req: NextRequest,
+  { params: _params }: { params: { id: string } },
 ) {
+  // TODO: Re-enable when thirdweb marketplace extensions are available
+  return NextResponse.json(
+    { error: 'Marketplace revoke functionality temporarily disabled' },
+    { status: 503 }
+  );
+}
   try {
     const { marketplace, buyers } = (await req.json()) as Body;
     const listingId = BigInt(params.id);
