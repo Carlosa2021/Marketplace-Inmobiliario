@@ -21,7 +21,8 @@ export async function POST(
     { error: 'Marketplace revoke functionality temporarily disabled' },
     { status: 503 }
   );
-}
+  
+  /*
   try {
     const { marketplace, buyers } = (await req.json()) as Body;
     const listingId = BigInt(params.id);
@@ -55,4 +56,5 @@ export async function POST(
     const msg = e instanceof Error ? e.message : String(e);
     return new Response(JSON.stringify({ error: msg }), { status: 500 });
   }
+  */
 }

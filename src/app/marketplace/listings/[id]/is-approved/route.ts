@@ -21,7 +21,8 @@ export async function GET(
     { error: 'Marketplace approval check functionality temporarily disabled' },
     { status: 503 }
   );
-}
+  
+  /*
   try {
     const { searchParams } = new URL(req.url);
     const marketplace = searchParams.get('marketplace')!;
@@ -48,4 +49,5 @@ export async function GET(
     const msg = e instanceof Error ? e.message : String(e);
     return new Response(JSON.stringify({ error: msg }), { status: 500 });
   }
+  */
 }
