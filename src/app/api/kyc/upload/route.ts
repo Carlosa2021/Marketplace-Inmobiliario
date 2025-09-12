@@ -3,14 +3,6 @@ import { NextResponse } from 'next/server';
 
 export const runtime = 'nodejs';
 
-type ThirdwebUploadResult = {
-  url?: string;
-  src?: string;
-  ipfs?: string;
-  IpfsHash?: string;
-  [k: string]: unknown;
-};
-
 function extractUrlFromResult(res: unknown): string | null {
   if (typeof res === 'string') return res;
   if (res && typeof res === 'object') {
