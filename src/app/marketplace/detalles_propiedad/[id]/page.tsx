@@ -182,14 +182,30 @@ export default function PropertyPage() {
     const uri = String(tokenUriRaw).startsWith('ipfs://')
       ? String(tokenUriRaw).replace('ipfs://', 'https://ipfs.io/ipfs/')
       : String(tokenUriRaw);
-    fetch(uri)
-      .then((res) => res.json())
-      .then((data: unknown) => {
-        if (typeof data === 'object' && data !== null)
-          setMetadata(data as NFTMetadata);
-        else setMetadata(null);
+
+    // Timeout para evitar que se quede cargando indefinidamente
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 segundos timeout
+
+    fetch(uri, { signal: controller.signal })
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
       })
-      .catch(() => setMetadata(null));
+      .then((data: unknown) => {
+        if (typeof data === 'object' && data !== null) {
+          setMetadata(data as NFTMetadata);
+        } else {
+          setMetadata(null);
+        }
+      })
+      .catch((error) => {
+        console.warn('Error loading NFT metadata:', error);
+        setMetadata(null);
+      })
+      .finally(() => {
+        clearTimeout(timeoutId);
+      });
   }, [tokenUriRaw]);
 
   // UI estado compra
@@ -207,7 +223,7 @@ export default function PropertyPage() {
       <NFTProvider contract={nftCollectionContract} tokenId={tokenId!}>
         <div className="grid md:grid-cols-2 gap-6 bg-white dark:bg-zinc-900 rounded-xl shadow-xl overflow-hidden">
           {/* Imagen */}
-          <div className="w-full h-96 md:h-full">
+          <div className="w-full h-96 md:h-full relative">
             <NFTMedia className="w-full h-full object-cover rounded-xl" />
           </div>
 

@@ -4,14 +4,17 @@
 import Link from 'next/link';
 import { useTheme } from 'next-themes';
 import { usePathname } from 'next/navigation';
-import { ConnectWallet } from '@/components/ConnectWallet';
+import { ConnectButton } from 'thirdweb/react';
+import { client } from '@/lib/thirdweb/client-browser';
+import { chain } from '@/lib/thirdweb/client-browser';
 import { useState, useEffect } from 'react';
 
 const navLinks = [
-  { href: '/marketplace', label: 'Explorar' },
+  { href: '/marketplace', label: 'Marketplace' },
+  { href: '/marketplace/demo', label: 'Demo' },
   { href: '/mis-nfts', label: 'Mis Inmuebles' },
   { href: '/crear-nft', label: 'Crear NFT' },
-  { href: '/kyc', label: 'KYC' }, // <-- añadido
+  { href: '/kyc', label: 'KYC' },
   { href: '/admin', label: 'Admin' },
 ];
 
@@ -76,8 +79,10 @@ export function Navbar() {
           </button>
 
           <div className="hidden md:block">
-            <ConnectWallet
-              theme={theme === 'dark' || theme === 'light' ? theme : undefined}
+            <ConnectButton
+              client={client}
+              chain={chain}
+              theme={theme === 'dark' ? 'dark' : 'light'}
             />
           </div>
 
@@ -155,8 +160,10 @@ export function Navbar() {
 
         <div className="mt-4">
           {/* Wallet en mobile */}
-          <ConnectWallet
-            theme={theme === 'dark' || theme === 'light' ? theme : undefined}
+          <ConnectButton
+            client={client}
+            chain={chain}
+            theme={theme === 'dark' ? 'dark' : 'light'}
           />
         </div>
       </div>

@@ -22,22 +22,20 @@ const KycInputSchema = z.object({
 });
 
 /**
- * Helper: intenta subir base64 a Thirdweb Storage (import dinámico)
+ * Helper: intenta subir base64 a Thirdweb Storage SDK v5
  */
 async function tryUploadBase64ToThirdweb(
   base64data: string,
 ): Promise<string | null> {
-  if (!process.env.THIRDWEB_KEY) return null;
+  if (!process.env.THIRDWEB_SECRET_KEY) return null;
 
   try {
-    // import dinámico para no romper dev sin la dependencia
-    const mod = await import('@thirdweb-dev/storage');
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const ThirdwebStorage = (mod as any).ThirdwebStorage;
-    if (!ThirdwebStorage) return null;
+    // Updated to Thirdweb SDK v5 storage
+    const { upload } = await import('thirdweb/storage');
+    const { createThirdwebClient } = await import('thirdweb');
 
-    const storage = new ThirdwebStorage({
-      secretKey: process.env.THIRDWEB_KEY,
+    const client = createThirdwebClient({
+      secretKey: process.env.THIRDWEB_SECRET_KEY,
     });
 
     // base64 con cabecera: data:<mime>;base64,AAAA...
@@ -47,48 +45,17 @@ async function tryUploadBase64ToThirdweb(
       commaIndex > -1 ? base64data.slice(commaIndex + 1) : base64data;
     const buffer = Buffer.from(rawBase64, 'base64');
 
-    // Si SDK soporta uploadRaw(buffer)
-    if (typeof storage.uploadRaw === 'function') {
-      const res = await storage.uploadRaw(buffer);
-      if (typeof res === 'string') return res;
-      // intentar distintas formas de respuesta
-      return res?.url ?? res?.src ?? res?.ipfs ?? res?.IpfsHash ?? null;
-    }
+    // Determine MIME type from metadata
+    let mimeType = 'application/octet-stream';
+    if (meta.includes('image/png')) mimeType = 'image/png';
+    else if (meta.includes('image/jpeg')) mimeType = 'image/jpeg';
+    else if (meta.includes('pdf')) mimeType = 'application/pdf';
 
-    // Fallback: escribir archivo temporal y usar upload(path)
-    const tmpDir =
-      process.platform === 'win32' ? process.env.TEMP || '.' : '/tmp';
-    const uniq = `kyc-${Date.now()}-${Math.random().toString(36).slice(2)}`;
-    const ext = meta.includes('image/png')
-      ? '.png'
-      : meta.includes('image/jpeg')
-      ? '.jpg'
-      : meta.includes('pdf')
-      ? '.pdf'
-      : '';
-    const tmpPath = path.join(tmpDir, uniq + ext);
-    fs.writeFileSync(tmpPath, buffer);
+    // SDK v5 upload method
+    const file = new File([buffer], 'kyc-document', { type: mimeType });
+    const uris = await upload({ client, files: [file] });
 
-    try {
-      if (typeof storage.upload === 'function') {
-        const res = await storage.upload(tmpPath);
-        try {
-          fs.unlinkSync(tmpPath);
-        } catch {
-          /* ignore */
-        }
-        if (typeof res === 'string') return res;
-        return res?.url ?? res?.src ?? res?.ipfs ?? res?.IpfsHash ?? null;
-      }
-    } finally {
-      try {
-        if (fs.existsSync(tmpPath)) fs.unlinkSync(tmpPath);
-      } catch {
-        /* ignore */
-      }
-    }
-
-    return null;
+    return uris[0] || null;
   } catch (err) {
     console.error('Thirdweb upload error', err);
     return null;

@@ -5,8 +5,7 @@ import { ThemeProvider } from 'next-themes';
 import type { ReactNode } from 'react';
 
 /**
- * Componente CLIENTE que envuelve ThemeProvider y ThirdwebProvider.
- * OJO: ThirdwebProvider en tu versión NO recibe `client` ni `autoConnect`.
+ * Providers simplificados para evitar loops y errores masivos
  */
 export function Providers({ children }: { children: ReactNode }) {
   return (

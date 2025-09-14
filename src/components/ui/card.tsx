@@ -16,3 +16,13 @@ export function Card({ children, className }: Props) {
 export function CardContent({ children, className }: Props) {
   return <div className={className}>{children}</div>;
 }
+
+export function CardHeader({ children, className }: Props) {
+  return <div className={`p-4 ${className || ''}`}>{children}</div>;
+}
+
+export function CardTitle({ children, className }: Props) {
+  return (
+    <h3 className={`text-lg font-semibold ${className || ''}`}>{children}</h3>
+  );
+}

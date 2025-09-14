@@ -19,6 +19,22 @@ type Body = {
 
 export async function POST(req: NextRequest) {
   try {
+    // Verificar si las variables de entorno están configuradas
+    const adminPk =
+      process.env.THIRDWEB_ADMIN_PK ||
+      process.env.ADMIN_PRIVATE_KEY ||
+      process.env.THIRDWEB_PRIVATE_KEY;
+    if (!adminPk) {
+      return new Response(
+        JSON.stringify({
+          error:
+            'Marketplace listing creation requires admin private key configuration',
+          hint: 'Set THIRDWEB_ADMIN_PK or ADMIN_PRIVATE_KEY in environment variables',
+        }),
+        { status: 501, headers: { 'content-type': 'application/json' } },
+      );
+    }
+
     const {
       marketplace,
       assetContract,
@@ -27,17 +43,6 @@ export async function POST(req: NextRequest) {
       quantity = 1,
       seconds = 30 * 24 * 3600,
     } = (await req.json()) as Body;
-
-    // necesitamos una cuenta que firme en el servidor
-    const adminPk = process.env.THIRDWEB_ADMIN_PK;
-    if (!adminPk) {
-      return new Response(
-        JSON.stringify({
-          error: 'Falta THIRDWEB_ADMIN_PK en variables de entorno',
-        }),
-        { status: 500, headers: { 'content-type': 'application/json' } },
-      );
-    }
 
     const account = privateKeyToAccount({
       client,

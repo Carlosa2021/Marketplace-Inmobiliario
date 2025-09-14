@@ -3,6 +3,29 @@ import { NextResponse } from 'next/server';
 
 export const runtime = 'nodejs';
 
+// Type definition for ThirdwebStorage module
+interface ThirdwebStorageModule {
+  ThirdwebStorage: new (config: { secretKey: string }) => {
+    uploadRaw?: (buffer: Buffer) => Promise<unknown>;
+    upload?: (path: string) => Promise<unknown>;
+  };
+}
+
+function extractUrlFromResult(res: unknown): string | null {
+  if (typeof res === 'string') return res;
+  if (res && typeof res === 'object') {
+    const r = res as Record<string, unknown>;
+    if (typeof r.url === 'string') return r.url;
+    if (typeof r.src === 'string') return r.src;
+    if (typeof r.ipfs === 'string') return r.ipfs;
+    if (typeof r.IpfsHash === 'string') {
+      // convert ipfs hash to gateway URL if you want:
+      return `ipfs://${r.IpfsHash}`;
+    }
+  }
+  return null;
+}
+
 export async function POST(req: Request) {
   try {
     const form = await req.formData();
@@ -23,6 +46,7 @@ export async function POST(req: Request) {
         { status: 400 },
       );
     }
+    const buffer = Buffer.from(arrayBuffer);
 
     // Option toggle: use thirdweb storage or a custom S3 flow
     const useThirdweb =

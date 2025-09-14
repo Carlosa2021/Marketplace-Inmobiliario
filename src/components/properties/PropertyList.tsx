@@ -77,25 +77,28 @@ export default function PropertyList() {
           tokenId={listing.tokenId}
           key={String(listing.id)}
         >
-          <Card className="rounded-2xl shadow-md bg-white dark:bg-zinc-900 border hover:scale-105 transition-transform overflow-hidden cursor-pointer h-[380px] flex flex-col">
-            <div className="w-full h-60 bg-card dark:bg-zinc-900">
+          <Card className="rounded-2xl shadow-md bg-white dark:bg-zinc-900 border hover:scale-105 transition-transform overflow-hidden cursor-pointer h-[420px] flex flex-col">
+            <div className="w-full h-52 bg-card dark:bg-zinc-900 relative">
               <NFTMedia className="w-full h-full object-cover rounded-t-2xl bg-card dark:bg-zinc-900" />
             </div>
-            <CardContent className="p-4 flex flex-col gap-2 flex-1">
-              <NFTName className="text-lg font-bold truncate text-foreground" />
-              <NFTDescription className="text-xs text-muted-foreground line-clamp-2" />
-              <p className="mt-2 font-medium text-indigo-600 dark:text-indigo-300">
-                <span className="text-base">
-                  {listing.currencyValuePerToken?.displayValue}{' '}
-                  {listing.currencyValuePerToken?.symbol}
-                </span>
-              </p>
-              <div className="mt-auto pt-2 flex">
+            <CardContent className="p-4 flex flex-col gap-2 flex-1 min-h-[160px]">
+              <div className="flex-1">
+                <NFTName className="text-lg font-bold truncate text-foreground block mb-2" />
+                <NFTDescription className="text-xs text-muted-foreground line-clamp-2 block mb-3" />
+              </div>
+
+              <div className="mt-auto pt-3">
+                <p className="mb-4 font-medium text-indigo-600 dark:text-indigo-300">
+                  <span className="text-lg font-bold">
+                    {listing.currencyValuePerToken?.displayValue || 'N/A'}{' '}
+                    {listing.currencyValuePerToken?.symbol || 'ETH'}
+                  </span>
+                </p>
                 <Link
-                  href={`/marketplace/${listing.id}`}
-                  className="bg-indigo-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-indigo-700 transition w-full text-center text-base"
+                  href={`/marketplace/detalles_propiedad/${listing.id}`}
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-bold transition-all duration-200 w-full text-center text-base inline-block shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
                 >
-                  Ver detalles
+                  👁️ Ver detalles
                 </Link>
               </div>
             </CardContent>

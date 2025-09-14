@@ -7,19 +7,25 @@ export const client = createThirdwebClient({
 });
 
 // lee la private key del .env (sin NEXT_PUBLIC_)
-const rawKey = process.env.ADMIN_PRIVATE_KEY ?? '';
+const rawKey =
+  process.env.ADMIN_PRIVATE_KEY ??
+  process.env.THIRDWEB_ADMIN_PK ??
+  process.env.THIRDWEB_PRIVATE_KEY ??
+  '';
 
-// normaliza: añade 0x si no lo tiene
-const hexKey = (
-  rawKey.startsWith('0x') ? rawKey : `0x${rawKey}`
-) as `0x${string}`;
+// normaliza: añade 0x si no lo tiene, solo si rawKey no está vacío
+const hexKey =
+  rawKey && !rawKey.startsWith('0x')
+    ? `0x${rawKey}`
+    : (rawKey as `0x${string}`);
 
-export const adminAccount = rawKey
-  ? privateKeyToAccount({
-      client,
-      privateKey: hexKey,
-    })
-  : undefined;
+export const adminAccount =
+  rawKey && rawKey.length >= 64
+    ? privateKeyToAccount({
+        client,
+        privateKey: hexKey,
+      })
+    : undefined;
 
 export function requireAdmin() {
   if (!adminAccount) {
